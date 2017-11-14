@@ -61,7 +61,7 @@ const slackbot = (botToken, options = {}) => {
 					message = message.replace(/<chosen>/gi, chosen);
 					sendMessage(event.channel, message);
 				} else {
-					sendMessage(event.channel, 'Xin lỗi, chị chưa hiểu câu hỏi.');
+					sendMessage(event.channel, 'Xin lỗi, chị chưa hiểu câu hỏi. Cú pháp danh sách là `: a, b, c .`');
 				}
 			} else if (messageContainsText(event, ['thời tiết', 'thoi tiet', 'thoitiet'])) {
 				// this one is async
