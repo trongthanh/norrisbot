@@ -9,6 +9,7 @@ import {
 } from './utils';
 import jokes from './data/gossip';
 import greetings from './data/greetings';
+import choosing from './data/choosing';
 import pictures from './data/pictures';
 import { WundergroundWeather } from './WundergroundWeather';
 
@@ -30,7 +31,7 @@ const slackbot = (botToken, options = {}) => {
 	const rtm = new RtmClient(botToken, opt.rtmOptions);
 	const web = new WebClient(botToken);
 
-	function sendMessage(to, message, msgOptions) {
+	function sendMessage(to, message, msgOptions = { as_user: true }) {
 		web.chat.postMessage(to, message, msgOptions);
 		opt.logger.info(`Posting message to ${to}`, msgOptions);
 	}
@@ -44,18 +45,32 @@ const slackbot = (botToken, options = {}) => {
 			messageContainsText(event, opt.triggerOnWords)
 		) {
 			let message;
-			if (messageContainsText(event, ['thời tiết', 'thoi tiet', 'thoitiet'])) {
+			if (messageContainsText(event, ['chọn'])) {
+				// giữa: một, hai, ba. chị ba chọn ai?
+				// chị ba hãy chọn: một, hai, ba.
+				// chị ba hãy chọn một: một, hai, ba
+				const parseReg = /:((?:.*?(?:[,.;?!]|$))*)/i;
+				const results = event.text.match(parseReg);
+				if (results) {
+					const list = results[1]; //một, hai, ba.
+					let items = list.split(',');
+					items = items.map(item => item.replace(/[;.?!]/g, ''));
+					const chosen = pickRandom(items);
+					message = pickRandom(choosing);
+					message = message.replace(/<chosen>/gi, chosen);
+					sendMessage(event.channel, message);
+				} else {
+					sendMessage(event.channel, 'Xin lỗi, chị chưa hiểu câu hỏi.');
+				}
+			} else if (messageContainsText(event, ['thời tiết', 'thoi tiet', 'thoitiet'])) {
 				// this one is async
 				weather.getHourlyWeather().then(w => {
-					const msgOptions = {
-						as_user: true,
-					};
-					sendMessage(event.channel, w.getWeatherMessage(), msgOptions);
+					sendMessage(event.channel, w.getWeatherMessage());
 				});
 			} else if (messageContainsText(event, ['chào', 'hello', 'khoẻ không', 'hello', 'hi chị'])) {
 				message = pickRandom(greetings);
-				message = message.replace(/<user>/g, `<@${event.user}>`);
-				sendMessage(event.channel, message, { as_user: true });
+				message = message.replace(/<user>/gi, `<@${event.user}>`);
+				sendMessage(event.channel, message);
 			} else {
 				// this one is sync
 				message = pickRandom(jokes);
