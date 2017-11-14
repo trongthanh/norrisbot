@@ -21,6 +21,7 @@ class WundergroundWeather {
 
 		return request({
 			method: 'GET',
+			// currently hardcoded to Ho Chi Minh city
 			uri: 'http://api.wunderground.com/api/33c9addcc118e257/conditions/lang:VU/q/zmw:00000.2.48894.json',
 			json: true, // Automatically stringifies the body to JSON
 		}).then(body => {
@@ -40,6 +41,7 @@ class WundergroundWeather {
 		return request
 			.get({
 				method: 'GET',
+				// currently hardcoded to Ho Chi Minh city
 				uri: 'http://api.wunderground.com/api/33c9addcc118e257/conditions/hourly/lang:VU/q/zmw:00000.2.48894.json',
 				json: true, // Automatically stringifies the body to JSON
 			})
@@ -124,10 +126,10 @@ class WundergroundWeather {
 			text += `Tốc độ gió là *${this.windSpeed()} km/h*. `;
 		}
 
-		//text += 'Thời tiết hiện tại là ' + this.mainCondition() + '; ';
+		text += `Thời tiết hiện tại là *${this.mainCondition()}*. `;
 
 		const nextHourCondition = this.nextHourCondition().toLowerCase();
-		if (nextHourCondition && nextHourCondition !== this.mainCondition().toLowerCase()) {
+		if (nextHourCondition) {
 			text += `Thời tiết của giờ tiếp theo là *${nextHourCondition}*. `;
 		}
 
