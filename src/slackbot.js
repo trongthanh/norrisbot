@@ -1,28 +1,29 @@
 import { RtmClient, WebClient, RTM_EVENTS, CLIENT_EVENTS } from '@slack/client';
 import {
 	isMessage,
-	isMessageToChannel,
+	// isMessageToChannel,
 	isFromUser,
 	messageContainsText,
-	filterJokesByCategories,
+	// filterJokesByCategories,
 	pickRandom,
 } from './utils';
 import jokes from './data/gossip';
+import greetings from './data/greetings';
 import pictures from './data/pictures';
 import { WundergroundWeather } from './WundergroundWeather';
 
 const weather = new WundergroundWeather();
 
 const defaultOptions = {
-	triggerOnWords: ['Chuck Norris', 'norrisbot'],
-	specialCategories: ['nerdy'],
+	triggerOnWords: ['Chị Ba', 'chi ba', 'chiba', 'chi3'],
+	specialCategories: [],
 	messageColor: '#590088',
 	usePictures: true,
 	logger: console,
 	rtmOptions: {},
 };
 
-const norrisbot = (botToken, options = {}) => {
+const slackbot = (botToken, options = {}) => {
 	let botId;
 
 	const opt = Object.assign({}, defaultOptions, options);
@@ -42,9 +43,8 @@ const norrisbot = (botToken, options = {}) => {
 			!isFromUser(event, botId) &&
 			messageContainsText(event, opt.triggerOnWords)
 		) {
-			const isWeatherQuestion = messageContainsText(event, ['thời tiết', 'thoi tiet', 'thoitiet']);
 			let message;
-			if (isWeatherQuestion) {
+			if (messageContainsText(event, ['thời tiết', 'thoi tiet', 'thoitiet'])) {
 				// this one is async
 				weather.getHourlyWeather().then(w => {
 					const msgOptions = {
@@ -52,6 +52,10 @@ const norrisbot = (botToken, options = {}) => {
 					};
 					sendMessage(event.channel, w.getWeatherMessage(), msgOptions);
 				});
+			} else if (messageContainsText(event, ['chào', 'hello', 'khoẻ không', 'hello', 'hi chị'])) {
+				message = pickRandom(greetings);
+				message = message.replace(/<user>/g, `<@${event.user}>`);
+				sendMessage(event.channel, message, { as_user: true });
 			} else {
 				// this one is sync
 				message = pickRandom(jokes);
@@ -90,4 +94,4 @@ const norrisbot = (botToken, options = {}) => {
 	};
 };
 
-export default norrisbot;
+export default slackbot;

@@ -1,7 +1,7 @@
 /* eslint-disable import/first, no-global-assign */
 require = require('@std/esm')(module, true);
 
-const Bot = require('./src/norrisbot').default;
+const Bot = require('./src/slackbot').default;
 
 // create a bot
 const settings = {

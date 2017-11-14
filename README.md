@@ -1,7 +1,6 @@
-# norrisbot
+# SLACKBOT DEMO
 
-[![CircleCI](https://circleci.com/gh/lmammino/norrisbot.svg?style=shield)](https://circleci.com/gh/lmammino/norrisbot) [![npm version](https://badge.fury.io/js/norrisbot.svg)](http://badge.fury.io/js/norrisbot) [![codecov](https://codecov.io/gh/lmammino/norrisbot/branch/master/graph/badge.svg)](https://codecov.io/gh/lmammino/norrisbot)
-[![Known Vulnerabilities](https://snyk.io/test/github/lmammino/norrisbot/badge.svg)](https://snyk.io/test/github/lmammino/norrisbot)
+[README is being rewritten...]
 
 ## Make your team hyper-productive with cutting Chuck Norris jokes
 
