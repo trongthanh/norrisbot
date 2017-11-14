@@ -45,7 +45,7 @@ const slackbot = (botToken, options = {}) => {
 			messageContainsText(event, opt.triggerOnWords)
 		) {
 			let message;
-			if (messageContainsText(event, ['chọn'])) {
+			if (messageContainsText(event, ['chọn', 'đoán'])) {
 				// giữa: một, hai, ba. chị ba chọn ai?
 				// chị ba hãy chọn: một, hai, ba.
 				// chị ba hãy chọn một: một, hai, ba
