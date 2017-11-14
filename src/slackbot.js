@@ -45,13 +45,14 @@ const slackbot = (botToken, options = {}) => {
 			messageContainsText(event, opt.triggerOnWords)
 		) {
 			let message;
-			if (messageContainsText(event, ['chọn', 'đoán'])) {
+			if (messageContainsText(event, ['chọn', 'đoán', 'là ai'])) {
 				// giữa: một, hai, ba. chị ba chọn ai?
 				// chị ba hãy chọn: một, hai, ba.
-				// chị ba hãy chọn một: một, hai, ba
-				const parseReg = /:((?:.*?(?:[,.;?!]|$))*)/i;
+				// chị ba hãy chọn một: một, hai, ba.
+				// must have ending .|;|! as the list separator
+				const parseReg = /:((?:,?.*?[;.!:])*)/i;
 				const results = event.text.match(parseReg);
-				if (results) {
+				if (results && results[1]) {
 					const list = results[1]; //một, hai, ba.
 					let items = list.split(',');
 					items = items.map(item => item.replace(/[;.?!]/g, ''));
