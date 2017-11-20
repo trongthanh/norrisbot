@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 const webApp = express();
 webApp.use(bodyParser.json());
 
-const PASS = process.env.PASS_PHRASE;
+const PASS = process.env.PASS_PHRASE || '123456';
 
 webApp.get('/hook', (req, res) => {
 	console.log('hook request');
@@ -12,13 +12,19 @@ webApp.get('/hook', (req, res) => {
 	try {
 		if (req.query && req.query.pass === PASS) {
 			// console.log('result: ', speech);
-			const s = req.query.s || req.query.text || req.query.msg || req.query.message;
-
 			if (webApp.bot) {
-				webApp.bot.sendMessage('#general', s);
+				const s = req.query.s || req.query.text || req.query.msg || req.query.message;
+				if (s) {
+					webApp.bot.sendMessage('#general', s);
+
+					return res.json({
+						status: 'success',
+					});
+				}
 
 				return res.json({
-					status: 'success',
+					status: 'error',
+					message: 'No message to send',
 				});
 			}
 
