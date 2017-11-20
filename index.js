@@ -1,6 +1,7 @@
 /* eslint-disable import/first, no-global-assign */
 require = require('@std/esm')(module, true);
 
+const app = require('./src/web-hook').default;
 const Bot = require('./src/slackbot').default;
 
 // create a bot
@@ -15,8 +16,6 @@ const settings = {
 const bot = Bot('xoxb-267467087399-biCVYNB04tqkfmHriguFie9l', settings);
 bot.start();
 
-// bot.on('start', () => {
-//   bot.postMessageToChannel('some-channel-name', 'Hello channel!');
-//   bot.postMessageToUser('some-username', 'hello bro!');
-//   bot.postMessageToGroup('some-private-group', 'hello group chat!');
-// });
+// inject bot to app
+app.bot = bot;
+

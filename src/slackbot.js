@@ -104,6 +104,7 @@ const slackbot = (botToken, options = {}) => {
 	return {
 		rtm,
 		web,
+		sendMessage,
 		start() {
 			rtm.start();
 		},
