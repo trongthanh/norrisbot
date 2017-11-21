@@ -32,8 +32,9 @@ const slackbot = (botToken, options = {}) => {
 	const web = new WebClient(botToken);
 
 	function sendMessage(to, message, msgOptions = { as_user: true }) {
-		web.chat.postMessage(to, message, msgOptions);
 		opt.logger.info(`Posting message to ${to}`, msgOptions);
+
+		return web.chat.postMessage(to, message, msgOptions);
 	}
 
 	rtm.on(RTM_EVENTS.MESSAGE, event => {

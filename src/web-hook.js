@@ -1,3 +1,7 @@
+/* © 2017 NauStud.io
+ * @author Thanh
+ */
+/* eslint-disable prefer-template */
 import express from 'express';
 import bodyParser from 'body-parser';
 
@@ -13,13 +17,27 @@ webApp.get('/hook', (req, res) => {
 		if (req.query && req.query.pass === PASS) {
 			// console.log('result: ', speech);
 			if (webApp.bot) {
-				const s = req.query.s || req.query.text || req.query.msg || req.query.message;
+				let s = req.query.s || req.query.text || req.query.msg || req.query.message;
+				let to = req.query.to || 'general';
 				if (s) {
-					webApp.bot.sendMessage('#general', s);
+					s = decodeURIComponent(s);
+					to = '#' + decodeURIComponent(to).trim(); // just channel for now
 
-					return res.json({
-						status: 'success',
-					});
+					webApp.bot
+						.sendMessage(to, decodeURIComponent(s))
+						.then(() => {
+							res.json({
+								status: 'success',
+							});
+						})
+						.catch(err => {
+							res.json({
+								status: 'error',
+								message: err.message,
+							});
+						});
+
+					return null;
 				}
 
 				return res.json({
