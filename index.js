@@ -6,7 +6,7 @@ const Bot = require('./src/slackbot').default;
 
 // create a bot
 const settings = {
-	triggerOnWords: ['Chị Ba', 'chi ba', 'chiba'],
+	triggerOnWords: ['chị ba', 'chi ba', 'chiba', 'chị im'],
 	specialCategories: [],
 	messageColor: '#590088',
 	usePictures: false,

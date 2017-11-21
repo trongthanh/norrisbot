@@ -16,7 +16,7 @@ import { WundergroundWeather } from './WundergroundWeather';
 const weather = new WundergroundWeather();
 
 const defaultOptions = {
-	triggerOnWords: ['Chị Ba', 'chi ba', 'chiba', 'chi3'],
+	triggerOnWords: ['Chị Ba', 'chi ba', 'chiba'],
 	specialCategories: [],
 	messageColor: '#590088',
 	usePictures: true,
@@ -63,7 +63,7 @@ const slackbot = (botToken, options = {}) => {
 				} else {
 					sendMessage(event.channel, 'Xin lỗi, chị chưa hiểu câu hỏi. Cú pháp danh sách là `: a, b, c .`');
 				}
-			} else if (messageContainsText(event, ['thời tiết', 'thoi tiet', 'thoitiet'])) {
+			} else if (messageContainsText(event, ['thời tiết', 'thoi tiet', 'thoitiet', 'mưa'])) {
 				// this one is async
 				weather.getHourlyWeather().then(w => {
 					sendMessage(event.channel, w.getWeatherMessage());
@@ -72,18 +72,22 @@ const slackbot = (botToken, options = {}) => {
 				message = pickRandom(greetings);
 				message = message.replace(/<user>/gi, `<@${event.user}>`);
 				sendMessage(event.channel, message);
+			} else if (messageContainsText(event, ['chị im', 'chị ba im'])) {
+				message = `<@${event.user}> im đi!`;
+				sendMessage(event.channel, message, {
+					as_user: true,
+					attachments: [
+						{
+							fallback: message,
+							image_url: 'https://media1.tenor.com/images/4548a5642b7ad2d2806ef9d49e00bc6d/tenor.gif',
+						},
+					],
+				});
 			} else {
 				// this one is sync
 				message = pickRandom(jokes);
 				const msgOptions = {
 					as_user: true,
-
-					// attachments: [
-					// 	{
-					// 		color: opt.messageColor,
-					// 		title: joke,
-					// 	},
-					// ],
 				};
 
 				if (opt.usePictures) {
