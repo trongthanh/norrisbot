@@ -46,7 +46,7 @@ const slackbot = (botToken, options = {}) => {
 			messageContainsText(event, opt.triggerOnWords)
 		) {
 			let message;
-			if (messageContainsText(event, ['chọn', 'đoán', 'là ai'])) {
+			if (messageContainsText(event, ['chọn', 'đoán', 'là ai', 'cái nào', 'món nào'])) {
 				// giữa: một, hai, ba. chị ba chọn ai?
 				// chị ba hãy chọn: một, hai, ba.
 				// chị ba hãy chọn một: một, hai, ba.
@@ -69,7 +69,7 @@ const slackbot = (botToken, options = {}) => {
 				weather.getHourlyWeather().then(w => {
 					sendMessage(event.channel, w.getWeatherMessage());
 				});
-			} else if (messageContainsText(event, ['chào', 'hello', 'khoẻ không', 'hello', 'hi chị'])) {
+			} else if (messageContainsText(event, ['chào', 'hello', 'hi chị'])) {
 				message = pickRandom(greetings);
 				message = message.replace(/<user>/gi, `<@${event.user}>`);
 				sendMessage(event.channel, message);
@@ -81,6 +81,17 @@ const slackbot = (botToken, options = {}) => {
 						{
 							fallback: message,
 							image_url: 'https://media1.tenor.com/images/4548a5642b7ad2d2806ef9d49e00bc6d/tenor.gif',
+						},
+					],
+				});
+			} else if (messageContainsText(event, ['đua không', 'chơi không', 'khoẻ không', 'đi ra đi'])) {
+				message = 'Cô là ai? :fearful: Cháu không biết. :white_frowning_face: CÔ ĐI RA ĐI! :scream:';
+				sendMessage(event.channel, message, {
+					as_user: true,
+					attachments: [
+						{
+							fallback: message,
+							image_url: 'https://media.giphy.com/media/3osBLyfpNI2zxehU8U/giphy.gif',
 						},
 					],
 				});
