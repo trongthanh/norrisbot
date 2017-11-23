@@ -46,7 +46,7 @@ const slackbot = (botToken, options = {}) => {
 			messageContainsText(event, opt.triggerOnWords)
 		) {
 			let message;
-			if (messageContainsText(event, ['chọn', 'đoán', 'là ai', 'cái nào', 'món nào'])) {
+			if (messageContainsText(event, ['chọn', 'đoán', 'cái nào', 'món nào'])) {
 				// giữa: một, hai, ba. chị ba chọn ai?
 				// chị ba hãy chọn: một, hai, ba.
 				// chị ba hãy chọn một: một, hai, ba.
@@ -84,7 +84,16 @@ const slackbot = (botToken, options = {}) => {
 						},
 					],
 				});
-			} else if (messageContainsText(event, ['đua không', 'chơi không', 'khoẻ không', 'đi ra đi'])) {
+			} else if (
+				messageContainsText(event, [
+					'đua không',
+					'đua xe không',
+					'chơi không',
+					'khoẻ không',
+					'là ai',
+					'đi ra đi',
+				])
+			) {
 				message = 'Cô là ai? :fearful: Cháu không biết. :white_frowning_face: CÔ ĐI RA ĐI! :scream:';
 				sendMessage(event.channel, message, {
 					as_user: true,
