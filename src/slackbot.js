@@ -12,8 +12,10 @@ import greetings from './data/greetings';
 import choosing from './data/choosing';
 import pictures from './data/pictures';
 import { WundergroundWeather } from './WundergroundWeather';
+import { AirQualityIndex } from './AirQualityIndex';
 
 const weather = new WundergroundWeather();
+const airQuality = new AirQualityIndex();
 
 const defaultOptions = {
 	triggerOnWords: ['Chị Ba', 'chi ba', 'chiba'],
@@ -68,6 +70,22 @@ const slackbot = (botToken, options = {}) => {
 				// this one is async
 				weather.getHourlyWeather().then(w => {
 					sendMessage(event.channel, w.getWeatherMessage());
+				});
+			} else if (
+				messageContainsText(event, [
+					'không khí',
+					'khong khi',
+					'aqi',
+					'air',
+					'pm2.5',
+					'trong lành',
+					'trong lanh',
+					'khẩu trang',
+				])
+			) {
+				// this one is async
+				airQuality.getCurrentAQI().then(aqi => {
+					web.chat.postMessage(event.channel, '', aqi.getAQIMessage());
 				});
 			} else if (messageContainsText(event, ['chào', 'hello', 'hi chị'])) {
 				message = pickRandom(greetings);
